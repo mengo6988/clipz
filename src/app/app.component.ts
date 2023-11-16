@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ModalService } from './services/modal.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'clipz';
+  // showModal = false;
+
+  // constructor(public modal: ModalService){}
+
+  // ngOnInit() {
+  //   setInterval(() => this.showModal = !this.showModal, 1000)
+  //   console.log(this.modal.modals)
+  // }
 }
