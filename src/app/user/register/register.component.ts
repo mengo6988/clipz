@@ -1,7 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 // import { passwordMatchValidator } from 'src/app/shared/custom-validators';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+// import { AngularFireAuth } from '@angular/fire/compat/auth';
+// import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { AuthService } from 'src/app/services/auth.service';
+import IUser from 'src/app/models/user.models';
+import { RegisterValidators } from '../validators/register-validators';
+import { EmailTaken } from '../validators/email-taken';
 
 @Component ({
   selector: 'app-register',
@@ -18,8 +23,9 @@ export class RegisterComponent implements OnInit{
   email = new FormControl('', [
     Validators.required,
     Validators.email,
-  ])
-  age = new FormControl('', [
+  ], this.emailTaken.validate)
+
+  age = new FormControl<number | null>(null, [
     Validators.required,
     Validators.min(18),
     Validators.max(120)
@@ -48,7 +54,7 @@ export class RegisterComponent implements OnInit{
     password: this.password,
     confirm_password: this.confirm_password,
     phoneNumber: this.phoneNumber,
-  })
+  }, [RegisterValidators.match('password', 'confirm_password')])
   // , {
   //   validators: passwordMatchValidator
   // });
@@ -59,13 +65,8 @@ export class RegisterComponent implements OnInit{
     this.alertColor = 'blue'
     this.inSubmission = true
 
-    const {email, password} = this.registerForm.value
-
     try {
-      const userCred = await this.auth.createUserWithEmailAndPassword(
-        email as string, password as string
-      )
-      console.log(userCred)
+      await this.auth.createUser(this.registerForm.value as IUser)
     } catch (e) {
       console.error(e)
 
@@ -79,11 +80,14 @@ export class RegisterComponent implements OnInit{
     this.alertColor = 'green'
     return
   }
-  constructor (private auth: AngularFireAuth) {}
+  constructor (
+    private auth: AuthService,
+    private emailTaken: EmailTaken
+    ) {}
 
   inSubmission = false
 
+
   ngOnInit(): void {
   }
-
 }

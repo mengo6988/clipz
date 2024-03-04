@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ModalService } from './services/modal.service';
+import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,9 @@ import { ModalService } from './services/modal.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  constructor ( public auth: AuthService) {
+
+  }
   // showModal = false;
 
   // constructor(public modal: ModalService){}
